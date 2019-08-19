@@ -16,7 +16,8 @@ class PessoaController extends Controller
     public function index()
     {
         $pessoas = Pessoa::all();
-        return view('index', compact('pessoas'));
+        $pessoasInativas = Pessoa::onlyTrashed()->get();
+        return view('index', compact('pessoas', 'pessoasInativas'));
     }
 
     /**
@@ -26,6 +27,7 @@ class PessoaController extends Controller
      */
     public function create()
     {
+
         $pessoas = Pessoa::all();
         return view('form');
     }
@@ -38,18 +40,18 @@ class PessoaController extends Controller
      */
     public function store(Request $request)
     {
-    
+
         DB::beginTransaction();
 
-            try {
-                $pessoa = Pessoa::create($request->all());
+        try {
+            $pessoa = Pessoa::create($request->all());
 
-                DB::commit();
-                return back()->with('success', 'Usuario cadastrado com sucesso!');
-            }catch(\Exception $e) {
-                DB::rollback();  
-                return back()->with('error','Erro no servidor');
-            }
+            DB::commit();
+            return back()->with('success', 'Usuario cadastrado com sucesso!');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return back()->with('error', 'Erro no servidor');
+        }
     }
 
     /**
@@ -72,7 +74,7 @@ class PessoaController extends Controller
     public function edit($id)
     {
         $pessoa = Pessoa::findOrFail($id);
-        
+
         return view('form', compact('pessoa'));
     }
 
@@ -87,17 +89,16 @@ class PessoaController extends Controller
     {
         DB::beginTransaction();
 
-        try{
-        $pessoa = Pessoa::findOrFail($id);
-        $pessoa->update($request->all());
+        try {
+            $pessoa = Pessoa::findOrFail($id);
+            $pessoa->update($request->all());
 
-        DB::commit();
+            DB::commit();
 
-        return redirect()->route('pessoa.index')->with('success', 'Usuário atualizado com sucesso');
-
-        }catch(\Exception $e){
-        DB::rollback();
-        return back()->with('error','Erro no servidor'. $e->getMessage());
+            return redirect()->route('pessoa.index')->with('success', 'Usuário atualizado com sucesso');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return back()->with('error', 'Erro no servidor' . $e->getMessage());
         }
     }
 
@@ -107,8 +108,25 @@ class PessoaController extends Controller
      * @param  \App\Pessoa  $pessoa
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Pessoa $pessoa)
+    public function destroy($id)
     {
-        //
+        DB::begintransaction();
+        try {
+            $pessoa = Pessoa::findOrFail($id);
+            $pessoa->delete();
+            DB::commit();
+            return back()->with('success', 'Usuario removido com sucesso!');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return back()->with('error', 'Erro no servidor' . $e->getMessage());
+        }
+    }
+
+    public function restore($id)
+    {
+        
+        $pessoa = Pessoa::onlyTrashed()->findOrFail($id);
+        $pessoa->restore();
+        return back();
     }
 }

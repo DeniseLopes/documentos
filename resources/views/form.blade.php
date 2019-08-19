@@ -7,7 +7,7 @@
     <title>Formulário Pessoa</title>
 </head>
 <body>
-
+<h3>{{(!isset($pessoa)) ? 'Cadastrar' : 'Editar' }}</h3>
     <div>
         @if(Session::has('success'))
             <p>{{Session::get('success')}}</p>
@@ -18,7 +18,7 @@
         @endif
     </div>
 
-    <form action = "{{(!isset($pessoa)) ? route('form') : url('pessoa/'. $pessoa->id) }}" method="POST">
+    <form action = "{{(!isset($pessoa)) ? url('/pessoa') : url('pessoa/' . $pessoa->id) }}" method="POST">
     
     @if(isset($pessoa))
         @method('PUT')
@@ -33,7 +33,7 @@
     
     </form>
 
-    <a href='pessoa'><button>Listar</button></a>
+    <a href="{{route('pessoa.index')}}"><button>Listar</button></a>
     
     
 </body>

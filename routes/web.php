@@ -13,3 +13,4 @@
 
 //Pessoas
 Route::resource('pessoa','PessoaController');
+Route::put('pessoa/restore/{id}', 'PessoaController@restore');
