@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Documento;
+use App\{Documento, Pessoa};
 use Illuminate\Http\Request;
+
 
 class DocumentoController extends Controller
 {
@@ -14,7 +15,11 @@ class DocumentoController extends Controller
      */
     public function index()
     {
-        //
+        $documentos = Documento::all();
+      
+
+        return view('documento.index', compact('documentos'));
+        
     }
 
     /**

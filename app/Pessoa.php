@@ -17,6 +17,6 @@ class Pessoa extends Model
     //relacionamentos
     public function documentos()
     {
-        return $this->hasMany('App\Documentos');
+        return $this->hasMany('App\Documento');
     }
 }

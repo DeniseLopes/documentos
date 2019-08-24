@@ -13,9 +13,10 @@ class CreatePessoasTable extends Migration
      */
     public function up()
     {
-        Schema::create('pessoas', function (Blueprint $table) {
+        Schema::create('pessoa', function (Blueprint $table) {
             $table->Increments('id');
             $table->string('nome', 45);
+        
             $table->softDeletes();
         });
     }

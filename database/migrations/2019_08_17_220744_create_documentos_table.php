@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+
 class CreateDocumentosTable extends Migration
 {
     /**
@@ -15,8 +16,9 @@ class CreateDocumentosTable extends Migration
     {
         Schema::create('documento', function (Blueprint $table) {
             $table->Increments('id');
-            $table->String('nome', 45);
-            $table->integer('pessoas_id')->unsigned()->index('fk_documentos_pessoas');
+            $table->string('nome', 45);
+            $table->string('numero');
+            $table->integer('pessoa_id')->unsigned();
             $table->softDeletes();
         });
     }
